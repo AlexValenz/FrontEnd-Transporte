@@ -1,0 +1,14 @@
+<!-- login.component.html -->
+<div *ngIf="!authService.isLoggedIn(); else loggedIn">
+    <!-- Formulario de login -->
+    <form (ngSubmit)="onLogin()">
+      <input type="text" [(ngModel)]="username" name="username" required placeholder="Username">
+      <input type="password" [(ngModel)]="password" name="password" required placeholder="Password">
+      <button type="submit">Login</button>
+    </form>
+  </div>
+  
+  <ng-template #loggedIn>
+    <p>You are already logged in.</p>
+  </ng-template>
+  
