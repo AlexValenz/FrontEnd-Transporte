@@ -1,39 +1,62 @@
-<div>
+<div class="dashboard-container">
+  <div class="header">
+    <button (click)="onLogout()" class="logout-button">Logout</button>
+  </div>
+
+  <div class="content">
     <h1>Dashboard de Transporte</h1>
-  
-    <!-- Botón de logout -->
-    <button (click)="onLogout()">Logout</button>
-  
+
     <!-- Formulario de Filtros -->
-    <form (ngSubmit)="aplicarFiltros()">
-      <label for="anioInicio">Año de Inicio:</label>
-      <input type="number" id="anioInicio" [(ngModel)]="filtros.anioInicio" name="anioInicio" />
-  
-      <label for="mesInicio">Mes de Inicio:</label>
-      <input type="number" id="mesInicio" [(ngModel)]="filtros.mesInicio" name="mesInicio" />
-  
-      <label for="anioFin">Año de Fin:</label>
-      <input type="number" id="anioFin" [(ngModel)]="filtros.anioFin" name="anioFin" />
-  
-      <label for="mesFin">Mes de Fin:</label>
-      <input type="number" id="mesFin" [(ngModel)]="filtros.mesFin" name="mesFin" />
-  
-      <label for="transporte">Transporte:</label>
-      <select id="transporte" [(ngModel)]="filtros.transporte" name="transporte">
-        <option value="todos">Todos</option>
-        <option *ngFor="let transporte of transportes" [value]="transporte">{{ transporte }}</option>
-      </select>
-  
-      <label for="variable">Variable:</label>
-      <select id="variable" [(ngModel)]="filtros.variable" name="variable">
-        <option *ngFor="let variable of variables" [value]="variable">{{ variable }}</option>
-      </select>
-  
-      <button type="submit">Aplicar Filtros</button>
+    <form (ngSubmit)="aplicarFiltros()" class="filters-form">
+      <div class="filter-item">
+        <label for="anioInicio">Año de Inicio:</label>
+        <select id="anioInicio" [(ngModel)]="filtros.anioInicio" name="anioInicio">
+          <option *ngFor="let anio of anios" [value]="anio">{{ anio }}</option>
+        </select>
+      </div>
+
+      <div class="filter-item">
+        <label for="mesInicio">Mes de Inicio:</label>
+        <select id="mesInicio" [(ngModel)]="filtros.mesInicio" name="mesInicio">
+          <option *ngFor="let mes of meses" [value]="mes">{{ mes }}</option>
+        </select>
+      </div>
+
+      <div class="filter-item">
+        <label for="anioFin">Año de Fin:</label>
+        <select id="anioFin" [(ngModel)]="filtros.anioFin" name="anioFin">
+          <option *ngFor="let anio of anios" [value]="anio">{{ anio }}</option>
+        </select>
+      </div>
+
+      <div class="filter-item">
+        <label for="mesFin">Mes de Fin:</label>
+        <select id="mesFin" [(ngModel)]="filtros.mesFin" name="mesFin">
+          <option *ngFor="let mes of meses" [value]="mes">{{ mes }}</option>
+        </select>
+      </div>
+
+      <div class="filter-item">
+        <label for="transporte">Transporte:</label>
+        <select id="transporte" [(ngModel)]="filtros.transporte" name="transporte">
+          <option value="todos">Todos</option>
+          <option *ngFor="let transporte of transportes" [value]="transporte">{{ transporte }}</option>
+        </select>
+      </div>
+
+      <div class="filter-item">
+        <label for="variable">Variable:</label>
+        <select id="variable" [(ngModel)]="filtros.variable" name="variable">
+          <option *ngFor="let variable of variables" [value]="variable">{{ variable }}</option>
+        </select>
+      </div>
+
+      <button type="submit" class="submit-button">Aplicar Filtros</button>
+      <button type="button" (click)="resetFiltros()" class="reset-button">Eliminar Filtros</button>
     </form>
-  
+
     <!-- Tabla de Datos -->
-    <div *ngIf="datosFiltrados.length > 0">
+    <div *ngIf="datosFiltrados.length > 0" class="table-container">
       <h2>Datos Filtrados</h2>
       <table>
         <thead>
@@ -46,7 +69,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let dato of datosFiltrados">
+          <tr *ngFor="let dato of datosFiltrados | slice:(currentPage * pageSize):(currentPage * pageSize + pageSize)">
             <td>{{ dato.anio }}</td>
             <td>{{ dato.idMes }}</td>
             <td>{{ dato.transporte }}</td>
@@ -55,10 +78,14 @@
           </tr>
         </tbody>
       </table>
+      <div class="pagination">
+        <button (click)="changePage(-1)" [disabled]="currentPage <= 0">Anterior</button>
+        <button (click)="changePage(1)" [disabled]="(currentPage + 1) * pageSize >= datosFiltrados.length">Siguiente</button>
+      </div>
     </div>
-  
+
     <div *ngIf="datosFiltrados.length === 0">
       <p>No hay datos para mostrar.</p>
     </div>
   </div>
-  
+</div>
