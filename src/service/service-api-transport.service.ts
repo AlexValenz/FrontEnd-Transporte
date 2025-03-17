@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class TransportService {
-  private urlApi = 'http://localhost:3000/data-iieg/filter';
+  private urlApi = 'http://18.223.180.64:3000/data-iieg/filter';
 
   constructor(private clienteHttp: HttpClient) {}
 
